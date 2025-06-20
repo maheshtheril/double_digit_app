@@ -18,7 +18,7 @@ def index():
 
     if request.method == "POST":
         grouped_results = []
-suffix = request.form.get("suffix", "").strip()
+        suffix = request.form.get("suffix", "").strip()
         set1 = request.form["set1"].split(",")
         set2 = request.form["set2"].split(",")
         set3 = request.form["set3"].split(",")
@@ -37,16 +37,16 @@ suffix = request.form.get("suffix", "").strip()
                     grouped[sorted_base] = unique_perms
                     seen.update(unique_perms)
 
-       for key in sorted(grouped.keys()):
-    for val in grouped[key]:
-        full_val = f"{val}-{suffix}" if suffix else val
-        grouped_results.append((key, full_val))
-
+        for key in sorted(grouped.keys()):
+            for val in grouped[key]:
+                full_val = f"{val}-{suffix}" if suffix else val
+                grouped_results.append((key, full_val))
 
         latest_results = grouped_results
         results = [combo for _, combo in grouped_results]
 
-    return render_template("index.html", results=results)
+    return render_template("index.html", results=results, group_result=None, group_key=None)
+
 
 @app.route("/download")
 def download():
