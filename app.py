@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify, send_file, render_template
 from itertools import permutations
 import pandas as pd
+import os
+
 
 app = Flask(__name__)
 
@@ -44,7 +46,7 @@ def download_file():
     return send_file('results.xlsx', as_attachment=True)
 
 
-    import os
+   
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
