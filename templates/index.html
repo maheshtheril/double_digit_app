@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Double Digit Combination Generator</title>
+</head>
+<body>
+    <h1>Double Digit Combination Generator</h1>
+
+    <label>1st Digits (comma separated):</label>
+    <input id="first" type="text" placeholder="e.g. 1,2,3"><br><br>
+
+    <label>2nd Digits:</label>
+    <input id="second" type="text" placeholder="e.g. 5,0,4,2"><br><br>
+
+    <label>3rd Digits:</label>
+    <input id="third" type="text" placeholder="e.g. 1,8,9"><br><br>
+
+    <button onclick="generate()">Generate & Download</button>
+
+    <p id="msg"></p>
+
+    <script>
+        function generate() {
+            const first = document.getElementById('first').value.split(',').map(s => s.trim());
+            const second = document.getElementById('second').value.split(',').map(s => s.trim());
+            const third = document.getElementById('third').value.split(',').map(s => s.trim());
+
+            fetch('/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ first, second, third })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('msg').innerHTML = `<a href="${data.download}">Download Excel File</a>`;
+            });
+        }
+    </script>
+</body>
+</html>
