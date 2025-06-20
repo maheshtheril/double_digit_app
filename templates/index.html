@@ -35,13 +35,19 @@
         <button type="submit">Generate</button>
     </form>
 
-    {% if results %}
-        <h2>Combinations</h2>
-        <ul>
-            {% for number in results %}
-                <li>{{ number }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+   {% if results %}
+  <h2>Combinations (Total: {{ results|length }})</h2>
+  <ul>
+    {% for number in results %}
+      <li>{{ number }}</li>
+    {% endfor %}
+  </ul>
+  
+  <br>
+  <a href="/download">
+    <button>Download as Excel</button>
+  </a>
+{% endif %}
+
 </body>
 </html>

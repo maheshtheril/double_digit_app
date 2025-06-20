@@ -13,7 +13,8 @@ def is_double_digit_pattern(num_str):
 @app.route("/", methods=["GET", "POST"])
 def index():
     global latest_results
-    results = []
+    results = [combo for _, combo in grouped_results]
+
     if request.method == "POST":
         set1 = request.form["set1"].split(",")
         set2 = request.form["set2"].split(",")
