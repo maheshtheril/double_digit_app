@@ -1,34 +1,53 @@
-@app.route("/", methods=["GET", "POST"])
-def index():
-    global latest_results
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Double Digit Combinations</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 40px;
+        }
+        h1 {
+            color: #333;
+        }
+        form, ul {
+            margin-top: 20px;
+        }
+        li {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <h1>Generate Double-Digit Combinations</h1>
 
-    results = []
+    <form method="post">
+        <label>First Digit Set (comma-separated):</label><br>
+        <input type="text" name="set1" required><br><br>
 
-    if request.method == "POST":
-        grouped_results = []
-        set1 = request.form["set1"].split(",")
-        set2 = request.form["set2"].split(",")
-        set3 = request.form["set3"].split(",")
+        <label>Second Digit Set (comma-separated):</label><br>
+        <input type="text" name="set2" required><br><br>
 
-        combos = product(set1, set2, set3)
-        seen = set()
-        grouped = {}
+        <label>Third Digit Set (comma-separated):</label><br>
+        <input type="text" name="set3" required><br><br>
 
-        for c in combos:
-            base = "".join(c)
-            if is_double_digit_pattern(base):
-                sorted_base = "".join(sorted(base))
-                perms = sorted(set("".join(p) for p in permutations(base)))
-                unique_perms = [p for p in perms if p not in seen]
-                if unique_perms:
-                    grouped[sorted_base] = unique_perms
-                    seen.update(unique_perms)
+        <button type="submit">Generate</button>
+    </form>
+{% if results %}
+  <h2>Combinations (Total: {{ results|length }})</h2>
+  <ul>
+    {% for number in results %}
+      <li>{{ number }}</li>
+    {% endfor %}
+  </ul>
 
-        for key in sorted(grouped.keys()):
-            for val in grouped[key]:
-                grouped_results.append((key, val))
-
-        latest_results = grouped_results
-        results = [combo for _, combo in grouped_results]
-
-    return render_template("index.html", results=results)
+  <br>
+  <a href="/download">
+    <button>Download as Excel</button>
+  </a>
+{% elif request.method == 'POST' %}
+  <p><strong>No matching combinations found.</strong></p>
+{% endif %}
+</body>
+</html>
