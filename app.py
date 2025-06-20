@@ -13,27 +13,35 @@ def is_double_digit_pattern(num_str):
 @app.route("/", methods=["GET", "POST"])
 def index():
     global latest_results
-    results = [combo for _, combo in grouped_results]
+
+    results = []
 
     if request.method == "POST":
+        grouped_results = []
         set1 = request.form["set1"].split(",")
         set2 = request.form["set2"].split(",")
         set3 = request.form["set3"].split(",")
 
         combos = product(set1, set2, set3)
         seen = set()
+        grouped = {}
 
         for c in combos:
             base = "".join(c)
             if is_double_digit_pattern(base):
-                perms = set("".join(p) for p in permutations(base))
-                for p in perms:
-                    if p not in seen:
-                        seen.add(p)
-                        results.append(p)
+                sorted_base = "".join(sorted(base))
+                perms = sorted(set("".join(p) for p in permutations(base)))
+                unique_perms = [p for p in perms if p not in seen]
+                if unique_perms:
+                    grouped[sorted_base] = unique_perms
+                    seen.update(unique_perms)
 
-        results.sort()
-        latest_results = results  # save to memory
+        for key in sorted(grouped.keys()):
+            for val in grouped[key]:
+                grouped_results.append((key, val))
+
+        latest_results = grouped_results
+        results = [combo for _, combo in grouped_results]
 
     return render_template("index.html", results=results)
 
